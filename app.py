@@ -72,7 +72,7 @@ SECTORS = {
 }
 
 
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl=3600,show_spinner="Fetching stock data...")
 def download_stock_data(tickers, start_date, end_date):
     """
     Download historical stock data from Yahoo Finance.
@@ -91,12 +91,15 @@ def download_stock_data(tickers, start_date, end_date):
     DataFrame : Multi-index DataFrame with stock data
     """
     try:
+        time.sleep(2)
         data = yf.download(
             tickers=tickers,
             start=start_date.strftime('%Y-%m-%d'),
             end=end_date.strftime('%Y-%m-%d'),
             progress=False
         )
+        if data.empty:
+            st.warning("Downloaded data is empty. You might be rate-limited.Please try again later.")
         return data
     except Exception as e:
         st.error(f"Error downloading data: {str(e)}")
@@ -122,8 +125,8 @@ def extract_close_prices(data, tickers):
         close_prices.columns = tickers
     
     # Clean missing values
-    close_prices = close_prices.fillna()
-    close_prices = close_prices.billna()
+    close_prices = close_prices.ffill()
+    close_prices = close_prices.bfill()
     
     return close_prices
 
