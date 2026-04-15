@@ -121,7 +121,7 @@ def extract_close_prices(data, tickers):
         close_prices.columns = tickers
     
     # Clean missing values
-    close_prices = close_prices.fillna(method='ffill')
+    close_prices = close_prices.fillna()
     close_prices = close_prices.fillna(method='bfill')
     
     return close_prices
