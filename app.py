@@ -8,6 +8,7 @@ Course: ACC102 - Mini Assignment Track 4
 Date: April 2026
 """
 
+import time
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -122,7 +123,7 @@ def extract_close_prices(data, tickers):
     
     # Clean missing values
     close_prices = close_prices.fillna()
-    close_prices = close_prices.fillna(method='bfill')
+    close_prices = close_prices.billna()
     
     return close_prices
 
